@@ -15,10 +15,10 @@ from typing import Callable, Dict, List, NamedTuple, Set, Tuple, IO, Any, Option
 from pathlib import Path
 import plistlib
 import shutil
-import random
 import string
 import tempfile
 import json
+import secrets
 
 secret_url = os.path.expandvars("$SECRET_URL").strip().rstrip("/")
 secret_key = os.path.expandvars("$SECRET_KEY")
@@ -61,11 +61,11 @@ def run_process(
 def rand_str(len: int, seed: Any = None):
     old_state: object = None
     if seed is not None:
-        old_state = random.getstate()
-        random.seed(seed)
-    result = "".join(random.choices(string.ascii_lowercase + string.digits, k=len))
+        old_state = secrets.SystemRandom().getstate()
+        secrets.SystemRandom().seed(seed)
+    result = "".join(secrets.SystemRandom().choices(string.ascii_lowercase + string.digits, k=len))
     if old_state is not None:
-        random.setstate(old_state)
+        secrets.SystemRandom().setstate(old_state)
     return result
 
 
